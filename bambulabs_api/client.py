@@ -6,7 +6,6 @@ and getting all the printer data.
 from typing import BinaryIO
 
 from bambulabs_api.states_info import PrintStatus
-from .camera_client import PrinterCamera
 from .ftp_client import PrinterFTPClient
 from .mqtt_client import PrinterMQTTClient
 from .filament_info import Filament, AMSFilamentSettings
@@ -26,8 +25,6 @@ class Printer:
         self.__printerMQTTClient = PrinterMQTTClient(self.ip_address,
                                                      self.access_code,
                                                      self.serial)
-        self.__printerCamera = PrinterCamera(self.ip_address,
-                                             self.access_code)
         self.__printerFTPClient = PrinterFTPClient(self.ip_address,
                                                    self.access_code)
 
@@ -37,14 +34,12 @@ class Printer:
         """
         self.__printerMQTTClient.connect()
         self.__printerMQTTClient.start()
-        self.__printerCamera.start()
 
     def disconnect(self):
         """
         Disconnect from the printer
         """
         self.__printerMQTTClient.stop()
-        self.__printerCamera.stop()
 
     def get_time(self) -> (int | str | None):
         """
